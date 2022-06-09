@@ -1,5 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* This file is for your main application CSS */
-@import "./phoenix.css";
+
+.card {
+  @apply p-4 bg-blue-200 text-blue-800 rounded-lg;
+
+  & .title {
+    @apply text-2xl tracking-tight font-bold;
+  }
+
+  & .description {
+    @apply pt-4 text-lg font-medium;
+
+    & a {
+      @apply underline text-blue-600;
+    }
+  }
+}
 
 /* Alerts and form errors used by phx.new */
 .alert {
@@ -118,3 +137,4 @@
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
+
