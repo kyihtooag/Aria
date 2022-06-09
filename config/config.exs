@@ -15,7 +15,11 @@ config :aria, AriaWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: AriaWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Aria.PubSub,
-  live_view: [signing_salt: "tmkheHUB"]
+  live_view: [signing_salt: "tmkheHUB"],
+  watchers: [
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]},
+    sass: {DartSass, :install_and_run, [:default, ~w(--watch)]}
+  ]
 
 # Configures the mailer
 #
@@ -37,6 +41,24 @@ config :esbuild,
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
+config :tailwind,
+  version: "3.0.24",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=../priv/static/assets/app.tailwind.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
+config :dart_sass,
+  version: "1.49.11",
+  default: [
+    args: ~w(css/app.scss ../priv/static/assets/app.tailwind.css),
+    cd: Path.expand("../assets", __DIR__)
   ]
 
 # Configures Elixir's Logger
