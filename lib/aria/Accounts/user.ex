@@ -23,6 +23,11 @@ defmodule Aria.Accounts.User do
     timestamps()
   end
 
+  def changeset(attrs) do
+    %User{}
+    |> cast(attrs, [:email, :password])
+  end
+
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])

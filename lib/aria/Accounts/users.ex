@@ -8,6 +8,10 @@ defmodule Aria.Accounts.Users do
 
   alias Aria.Accounts.User
 
+  def user_changeset(attrs \\ %{}) do
+    User.changeset(attrs)
+  end
+
   def change_user_registration(%User{} = user, attrs \\ %{}) do
     User.registration_changeset(user, attrs, hash_password: false, password_confirmation: false)
   end
