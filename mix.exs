@@ -25,7 +25,7 @@ defmodule Aria.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(e) when e in [:dev, :test], do: ["lib", "test/support", "credo_checks"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -33,6 +33,8 @@ defmodule Aria.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:phoenix, "~> 1.6.8"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -50,7 +52,8 @@ defmodule Aria.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:tailwind, "~> 0.1.5"},
-      {:dart_sass, "~> 0.5.0"}
+      {:dart_sass, "~> 0.5.0"},
+      {:pot, "~> 1.0"}
     ]
   end
 
@@ -67,7 +70,7 @@ defmodule Aria.MixProject do
         "sass default",
         "tailwind default"
       ],
-      setup: ["deps.get", "ecto.setup",  "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
