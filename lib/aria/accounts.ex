@@ -10,6 +10,8 @@ defmodule Aria.Accounts do
   alias Aria.Accounts.{Users, UserTokens}
   alias Aria.Notifiers.UserNotifier
 
+  defdelegate user_changeset(attrs \\ %{}), to: Users
+
   defdelegate change_user_registration(user, attrs \\ %{}), to: Users
 
   defdelegate get_user!(id), to: Users

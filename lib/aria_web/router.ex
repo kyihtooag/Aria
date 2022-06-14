@@ -17,7 +17,9 @@ defmodule AriaWeb.Router do
   scope "/", AriaWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    post "/login", SessionController, :login
+
+    live "/", Session.LoginLive
   end
 
   # Other scopes may use custom stacks.
