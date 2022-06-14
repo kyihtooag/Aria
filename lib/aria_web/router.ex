@@ -1,6 +1,8 @@
 defmodule AriaWeb.Router do
   use AriaWeb, :router
 
+  import AriaWeb.Plugs.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule AriaWeb.Router do
     plug :put_root_layout, {AriaWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -15,11 +18,23 @@ defmodule AriaWeb.Router do
   end
 
   scope "/", AriaWeb do
-    pipe_through :browser
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     post "/login", SessionController, :login
 
-    live "/", Session.LoginLive
+    live "/login", Session.LoginLive
+  end
+
+  scope "/", AriaWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/", PageController, :index
+  end
+
+  scope "/", AriaWeb do
+    pipe_through [:browser]
+
+    get "/users/log_out", SessionController, :logout
   end
 
   # Other scopes may use custom stacks.

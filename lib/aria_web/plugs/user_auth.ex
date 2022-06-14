@@ -75,7 +75,7 @@ defmodule AriaWeb.Plugs.UserAuth do
     user_token && Accounts.delete_session_token(user_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do
-      InvictaWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+      AriaWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn
@@ -133,7 +133,7 @@ defmodule AriaWeb.Plugs.UserAuth do
     else
       conn
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: Routes.session_path(conn, :login))
       |> halt()
     end
   end
