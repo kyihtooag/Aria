@@ -6,6 +6,7 @@
       </div>
       <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
         <.form let={f} for={@changeset}
+            id="login-form"
             action={Routes.session_path(@socket, :login)}
             phx-submit="save"
             phx-trigger-action={@trigger_submit}>

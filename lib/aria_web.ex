@@ -39,6 +39,7 @@ defmodule AriaWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+      alias AriaWeb.Lives.Session.LoginLive
     end
   end
 

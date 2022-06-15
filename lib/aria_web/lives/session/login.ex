@@ -1,4 +1,4 @@
-defmodule AriaWeb.Session.LoginLive do
+defmodule AriaWeb.Lives.Session.LoginLive do
   use AriaWeb, :live_view
 
   alias Aria.Accounts
