@@ -12,7 +12,7 @@ defmodule AriaWeb.SessionController do
     else
       conn
       |> put_flash(:error, "Invalid email or password")
-      |> render("new.html")
+      |> redirect(to: "/login")
     end
   end
 

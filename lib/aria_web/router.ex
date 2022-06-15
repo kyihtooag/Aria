@@ -34,7 +34,7 @@ defmodule AriaWeb.Router do
   scope "/", AriaWeb do
     pipe_through [:browser]
 
-    get "/users/log_out", SessionController, :logout
+    get "/log_out", SessionController, :logout
   end
 
   # Other scopes may use custom stacks.
