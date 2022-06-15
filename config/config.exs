@@ -61,6 +61,22 @@ config :dart_sass,
     cd: Path.expand("../assets", __DIR__)
   ]
 
+config :aria, :strategies,
+  github: [
+    client_id: "bf1e7eedd47b9391f986",
+    client_secret: "7ac343b0a5cd0ca86e79696c4dc60421242ab321",
+    redirect_uri: "http://localhost:4000/oauth/callback/github",
+    http_adapter: Assent.HTTPAdapter.Mint,
+    strategy: Assent.Strategy.Github
+  ],
+  google: [
+    client_id: "482550277576-vqosie6ka4tgnankkqpfl2jv8p31ul7e.apps.googleusercontent.com",
+    client_secret: "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",
+    redirect_uri: "http://localhost:4000/oauth/callback/google",
+    http_adapter: Assent.HTTPAdapter.Mint,
+    strategy: Assent.Strategy.Google
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

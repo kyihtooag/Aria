@@ -21,6 +21,8 @@ defmodule AriaWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     post "/login", SessionController, :login
+    get "/login/:provider", SessionController, :oauth
+    get "/oauth/callback/:provider", SessionController, :callback
 
     live "/login", Lives.Session.LoginLive, :login
   end
