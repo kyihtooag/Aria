@@ -22,7 +22,7 @@ defmodule AriaWeb.Router do
 
     post "/login", SessionController, :login
 
-    live "/login", Session.LoginLive
+    live "/login", Lives.Session.LoginLive, :login
   end
 
   scope "/", AriaWeb do
