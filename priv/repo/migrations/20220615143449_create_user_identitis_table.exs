@@ -5,13 +5,12 @@ defmodule Aria.Repo.Migrations.CreateUserIdentitisTable do
     execute "CREATE EXTENSION IF NOT EXISTS citext", ""
 
     create table(:accounts_users_identities, primary_key: false) do
+      add :id, :uuid, primary_key: true
       add :user_id, references(:accounts_users, type: :uuid, on_delete: :delete_all), null: false
       add :provider, :string, null: false
       add :provider_token, :string, null: false
-      add :provider_login, :string, null: false
       add :provider_email, :string, null: false
       add :provider_id, :string, null: false
-      add :provider_meta, :map, default: "{}", null: false
 
       timestamps()
     end

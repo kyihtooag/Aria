@@ -7,7 +7,7 @@ defmodule Aria.Accounts do
   alias Aria.Repo
 
   alias Aria.Accounts.{User, UserToken}
-  alias Aria.Accounts.{Users, UserTokens}
+  alias Aria.Accounts.{Users, UserTokens, UserIdentities}
   alias Aria.Notifiers.UserNotifier
 
   defdelegate user_changeset(attrs \\ %{}), to: Users
@@ -21,6 +21,14 @@ defmodule Aria.Accounts do
   defdelegate get_user_by_email_and_password(email, password), to: Users
 
   defdelegate register_user(attrs), to: Users
+
+  def register_oauth_user(provider, user, token) do
+    if existing_user = Users.get_user_by_provider(provider, user["email"]) do
+      UserIdentities.update_oauth_token(provider, existing_user, token)
+    else
+      Users.register_oauth_user(provider, user, token)
+    end
+  end
 
   def deliver_one_time_passcode(%User{is_confirmed: true}, "confirm") do
     {:error, :already_confirmed}

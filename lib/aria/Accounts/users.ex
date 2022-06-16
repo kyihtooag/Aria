@@ -6,7 +6,7 @@ defmodule Aria.Accounts.Users do
   import Ecto.Query, warn: false
   alias Aria.Repo
 
-  alias Aria.Accounts.User
+  alias Aria.Accounts.{User, UserIdentity, UserIdentities}
 
   def user_changeset(attrs \\ %{}) do
     User.changeset(attrs)
@@ -28,9 +28,33 @@ defmodule Aria.Accounts.Users do
     if User.valid_password?(user, password), do: user
   end
 
+  def get_user_by_provider(provider, email) do
+    query =
+      from(u in User,
+        join: i in assoc(u, :accounts_users_identities),
+        where:
+          i.provider == ^to_string(provider) and
+            fragment("lower(?)", u.email) == ^String.downcase(email)
+      )
+
+    Repo.one(query)
+  end
+
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def register_oauth_user(provider, user, token) do
+    user_identity_changeset = UserIdentity.oauth_changeset(provider, user, token)
+
+    if existing_user = get_user_by_email(user["email"]) do
+      UserIdentities.create_user_identity(existing_user, user_identity_changeset)
+    else
+      user_identity_changeset
+      |> User.oauth_changeset(user)
+      |> Repo.insert()
+    end
   end
 end

@@ -6,19 +6,23 @@ defmodule Aria.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias __MODULE__
+  alias Aria.Accounts.{User, UserIdentity}
   alias Aria.Repo
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "accounts_users" do
     field :name, :string
+    field :username, :string
     field :email, :string
+    field :avatar_url, :string
     field :is_confirmed, :boolean, default: false
     field :password, :string, virtual: true, redact: true
     field :password_confirmation, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
+
+    has_many :accounts_users_identities, UserIdentity
 
     timestamps()
   end
@@ -33,6 +37,29 @@ defmodule Aria.Accounts.User do
     |> cast(attrs, [:email, :password])
     |> validate_email()
     |> validate_password(opts)
+  end
+
+  def oauth_changeset(identity_changeset, user) do
+    if identity_changeset.valid? do
+      params = %{
+        "name" => user["name"],
+        "username" => get_username(user["name"]),
+        "email" => user["email"],
+        "avatar_url" => user["picture"]
+      }
+
+      %User{}
+      |> cast(params, [:email, :name, :username, :avatar_url])
+      |> validate_required([:email, :name, :username])
+      # |> validate_username()
+      |> validate_email()
+      |> put_assoc(:accounts_users_identities, [identity_changeset])
+    else
+      %User{}
+      |> change()
+      |> Map.put(:valid?, false)
+      |> put_assoc(:accounts_users_identities, [identity_changeset])
+    end
   end
 
   def confirm_changeset(user) do
@@ -88,6 +115,8 @@ defmodule Aria.Accounts.User do
       changeset
     end
   end
+
+  defp get_username(name), do: name |> String.replace(" ", "") |> String.downcase()
 
   def valid_password?(%User{hashed_password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
