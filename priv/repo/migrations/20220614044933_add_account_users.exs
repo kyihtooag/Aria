@@ -8,7 +8,7 @@ defmodule Aria.Repo.Migrations.AddAccountUsers do
       add :id, :uuid, primary_key: true
       add :name, :string
       add :email, :citext, null: false
-      add :hashed_password, :string, null: false
+      add :hashed_password, :string
       add :is_confirmed, :boolean, default: false
       add :confirmed_at, :utc_datetime
       timestamps()

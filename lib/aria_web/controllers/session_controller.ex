@@ -33,13 +33,16 @@ defmodule AriaWeb.SessionController do
     |> redirect(external: url)
   end
 
-  def callback(_conn, %{"provider" => provider, "state" => state} = params) do
-    IO.inspect(params)
+  def callback(conn, %{"provider" => provider, "state" => state} = params) do
     session_params = %{state: state}
 
-    {:ok, %{user: _user, token: _token}} =
+    {:ok, %{user: user, token: token}} =
       provider
       |> String.to_atom()
       |> MultiProvider.callback(params, session_params)
+      |> IO.inspect()
+
+    {:ok, user} = Accounts.register_oauth_user(provider, user, token)
+    UserAuth.log_in_user(conn, user)
   end
 end
