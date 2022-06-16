@@ -56,7 +56,8 @@ defmodule Aria.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:tailwind, "~> 0.1.5"},
       {:dart_sass, "~> 0.5.0"},
-      {:pot, "~> 1.0"}
+      {:pot, "~> 1.0"},
+      {:ex_fontawesome, "~> 0.7.1"}
     ]
   end
 

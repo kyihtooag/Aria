@@ -128,4 +128,19 @@ defmodule Aria.Accounts.UsersTest do
       refute user.is_confirmed
     end
   end
+
+  describe "register_oauth_user/3" do
+    test "registers a new user via oauth" do
+      user = %{
+        "email" => "test@gmail.com",
+        "name" => "Test User",
+        "picture" => "https://example.com",
+        "sub" => "provider-id"
+      }
+
+      token = %{"access_token" => :crypto.strong_rand_bytes(32) |> Base.encode64}
+
+      assert {:ok, _user} = Users.register_oauth_user("github", user, token)
+    end
+  end
 end
