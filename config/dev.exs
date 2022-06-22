@@ -1,5 +1,28 @@
 import Config
 
+config :aria, :files,
+  uploads_dir: Path.expand("../priv/uploads", __DIR__),
+  host: [scheme: "http", host: "localhost", port: 4000],
+  server_ip: "127.0.0.1",
+  hostname: "localhost",
+  transport_opts: []
+
+config :aria, :strategies,
+  github: [
+    client_id: System.fetch_env!("GITHUB_CLIENT_ID"),
+    client_secret: System.fetch_env!("GITHUB_CLIENT_SECRET"),
+    redirect_uri: "http://localhost:4000/oauth/callback/github",
+    http_adapter: Assent.HTTPAdapter.Mint,
+    strategy: Assent.Strategy.Github
+  ],
+  google: [
+    client_id: System.fetch_env!("GOOGLE_CLIENT_ID"),
+    client_secret: System.fetch_env!("GOOGLE_CLIENT_SECRET"),
+    redirect_uri: "http://localhost:4000/oauth/callback/google",
+    http_adapter: Assent.HTTPAdapter.Mint,
+    strategy: Assent.Strategy.Google
+  ]
+
 # Configure your database
 config :aria, Aria.Repo,
   username: "postgres",

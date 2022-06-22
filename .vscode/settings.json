@@ -2,5 +2,6 @@
     "scss.lint.unknownAtRules": "ignore",
     "files.associations": {
       "*.eex": "eex"
-    }
-  }
+    },
+    "editor.tabSize": 4
+}
