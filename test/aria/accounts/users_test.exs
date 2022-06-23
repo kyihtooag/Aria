@@ -138,7 +138,7 @@ defmodule Aria.Accounts.UsersTest do
         "sub" => "provider-id"
       }
 
-      token = %{"access_token" => :crypto.strong_rand_bytes(32) |> Base.encode64}
+      token = %{"access_token" => :crypto.strong_rand_bytes(32) |> Base.encode64()}
 
       assert {:ok, _user} = Users.register_oauth_user("github", user, token)
     end
